@@ -28,13 +28,13 @@ function initGlobalObject() {
 
     //Datastruktur för vilka platser som är lediga respektive har brickor
     //Genom at fylla i här med antingen X eler O kan ni testa era rättningsfunktioner 
-    oGameData.gameField = ['', '', '', '', '', '', '', '', ''];
+    oGameData.gameField =['X', 'O', 'X', '0', 'X', 'O', 'O', 'X', 'O'];
     
     /* Testdata för att testa rättningslösning */
     //oGameData.gameField = ['X', 'X', 'X', '', '', '', '', '', ''];
     //oGameData.gameField = ['X', '', '', 'X', '', '', 'X', '', ''];
     //oGameData.gameField = ['X', '', '', '', 'X', '', '', '', 'X'];
-    //oGameData.gameField = ['', '', 'X', '', 'X', '', 'X', '', ''];
+    //oGameData.gameField = ['', '', 'O', '', 'O', '', 'O', '', ''];
     //oGameData.gameField = ['X', 'O', 'X', '0', 'X', 'O', 'O', 'X', 'O'];
 
     //Indikerar tecknet som skall användas för spelare ett.
@@ -97,7 +97,6 @@ function checkForDraw() {
 
 
 // Nedanstående funktioner väntar vi med!
-
 function prepGame() {
 
 }
