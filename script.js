@@ -101,26 +101,22 @@ function prepGame() {
 
 }
 
+function initiateGame() {
+    
+}
+
+function executeMove (event) {
+    
+}
+
+function gameOver(result) {
+    
+}
+
 function validateForm() {
     
 }
 
-function initiateGame() {
-
-}
-
-function executeMove (event) {
-
-}
-
-function changePlayer() {
-
-}
-
 function timer() {
-
-}
-
-function gameOver(result) {
 
 }
