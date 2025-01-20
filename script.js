@@ -94,8 +94,6 @@ function checkForDraw() {
 
 }
 
-
-
 // Nedanstående funktioner väntar vi med!
 function prepGame() {
 
