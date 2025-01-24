@@ -8,15 +8,16 @@ let oGameData = {};
 
 window.addEventListener('load', () => {
     initGlobalObject();
-    if(checkForGameOver() === 1) {
-        console.log("Spelare 1 vann");        
-    } else if(checkForGameOver() === 2) {
-        console.log("Spelare 2 vann");
-    } else if(checkForGameOver() === 3) {
-        console.log("Oavgjort");
-    } else {
-        console.log("Spelet fortsätter");
-    }
+    prepGame();
+    // if(checkForGameOver() === 1) {
+    //     console.log("Spelare 1 vann");        
+    // } else if(checkForGameOver() === 2) {
+    //     console.log("Spelare 2 vann");
+    // } else if(checkForGameOver() === 3) {
+    //     console.log("Oavgjort");
+    // } else {
+    //     console.log("Spelet fortsätter");
+    // }
 });
 
 /**
@@ -71,6 +72,8 @@ function initGlobalObject() {
     oGameData.timeRef = document.querySelector("#errorMsg");
 }
 
+const log = (msg) => console.log(msg);
+
 /**
  * Kontrollerar för tre i rad genom att anropa funktionen checkWinner() och checkForDraw().
  * Returnerar 0 om spelet skall fortsätta, 
@@ -81,14 +84,14 @@ function initGlobalObject() {
  */
 function checkForGameOver() {
     if (checkWinner('X')){
-        return 1;
-     } else if (checkWinner('O')){
-         return 2;
-     } else if(checkForDraw()) {
-         return 3;
-     } else {
-         return 0;
-     }
+    return 1;
+    } else if (checkWinner('O')){
+        return 2;
+    } else if(checkForDraw()) {
+        return 3;
+    } else {
+        return 0;
+    }
 }
 
 // Säg till om ni vill få pseudokod för denna funktion
@@ -132,29 +135,124 @@ function checkForDraw() {
 
 // Nedanstående funktioner väntar vi med!
 function prepGame() {
+    log('prepGame()');
 
-}
+    const gameAreaRef = document.querySelector('#gameArea');
+    gameAreaRef.classList.add('d-none');
 
-function validateForm() {
-    
+    const startGameBtnRef = document.querySelector('#newGame');
+    startGameBtnRef.addEventListener('click', initiateGame);
 }
 
 function initiateGame() {
+    log('initiateGame()');
+    
+    const formRef = document.querySelector('#theForm');
+    formRef.classList.add('d-none');
 
+    const gameAreaRef = document.querySelector('#gameArea');
+    gameAreaRef.classList.remove('d-none');
+
+    const errorMsgRef = document.querySelector('#errorMsg');
+    errorMsgRef.textContent = '';
+
+    oGameData.nickNamePlayerOne = document.querySelector('#nick1').value;
+    oGameData.colorPlayerOne = document.querySelector('#color1').value;
+    oGameData.nickNamePlayerTwo = document.querySelector('#nick2').value;
+    oGameData.colorPlayerTwo = document.querySelector('#color2').value;
+    
+    const tdRefs = document.querySelectorAll('td');
+    for(let tdRef of tdRefs) {
+        tdRef.textContent = '';
+        tdRef.style.backgroundColor = '#ffffff';
+    }
+
+    let playerName = '';
+    let playerChar = '';
+
+    const random = Math.random();
+    if(random < 0.5) {
+        playerName = oGameData.nickNamePlayerOne;
+        playerChar = oGameData.playerOne;
+        oGameData.currentPlayer = oGameData.playerOne;
+    } else {
+        playerName = oGameData.nickNamePlayerTwo;
+        playerChar = oGameData.playerTwo;
+        oGameData.currentPlayer = oGameData.playerTwo;
+    }
+
+    let msgRef = document.querySelector('.jumbotron > h1');
+    msgRef.textContent = `Aktuell spelare är ${playerName}`;
+    
+    gameAreaRef.addEventListener('click', executeMove);
 }
 
 function executeMove (event) {
+    log('executeMove()');
+    if(event.target.tagName === 'TD') {
+        if(event.target.textContent === '') {
+            let id = event.target.dataset.id;
+            oGameData.gameField[id] = oGameData.currentPlayer;
+            event.target.textContent = oGameData.currentPlayer;
+            let name = '';
+            if(oGameData.currentPlayer === 'X') {
+                event.target.style.backgroundColor = oGameData.colorPlayerOne;
+                name = oGameData.nickNamePlayerTwo;
+                changePlayer('O');
+            } else {
+                event.target.style.backgroundColor = oGameData.colorPlayerTwo;
+                name = oGameData.nickNamePlayerOne;
+                changePlayer('X');
+            }
+            let msgRef = document.querySelector('.jumbotron > h1');
+            msgRef.textContent = `Aktuell spelare är ${name}`;
 
+            if(checkForGameOver() === 1) {
+                gameOver(1);
+            } else if(checkForGameOver() === 2) {
+                gameOver(2);
+            } else if(checkForGameOver() === 3) {
+                gameOver(3);
+            }
+        }
+    }
 }
 
-function changePlayer() {
+function changePlayer(player) {
+    log('changePlayer()');
+    oGameData.currentPlayer = player;
+}
+
+
+
+function gameOver(result) {
+    log(result);
+    const gameAreaRef = document.querySelector('#gameArea');
+    gameAreaRef.removeEventListener('click', executeMove);
+    gameAreaRef.classList.add('d-none');
+
+    const formRef = document.querySelector('#theForm');
+    formRef.classList.remove('d-none');
+
+    let winner = '';
+    if(result === 1) {
+        winner = oGameData.nickNamePlayerOne;
+    } else if(result === 2) {
+        winner = oGameData.nickNamePlayerTwo;
+    } else {
+        winner = 'Ingen';
+    }
+
+    let msgRef = document.querySelector('.jumbotron > h1');
+    msgRef.textContent = `${winner} vann! Spela igen?`;
+    initGlobalObject();
+}
+
+
+function validateForm() {
 
 }
 
 function timer() {
-
-}
-
-function gameOver(result) {
 
 }
